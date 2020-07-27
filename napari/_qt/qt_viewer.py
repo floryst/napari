@@ -420,8 +420,10 @@ class QtViewer(QSplitter):
             The napari event that triggered this method.
         """
         cursor = self.viewer.cursor
+        size = self.viewer.cursor_size
+        factor = self.viewer.layers[0].scale_factor
+        size *= factor
         if cursor == 'square':
-            size = self.viewer.cursor_size
             # make sure the square fits within the current canvas
             if size < 8 or size > (
                 min(*self.viewer.window.qt_viewer.canvas.size) - 4
@@ -430,7 +432,6 @@ class QtViewer(QSplitter):
             else:
                 q_cursor = QCursor(square_pixmap(size))
         elif cursor == 'circle':
-            size = self.viewer.cursor_size
             q_cursor = QCursor(circle_pixmap(size))
         else:
             q_cursor = self._cursors[cursor]

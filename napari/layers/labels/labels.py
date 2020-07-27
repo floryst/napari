@@ -696,7 +696,10 @@ class Labels(Image):
         """
         if refresh is True:
             self._save_history()
-        brush_size_dims = [self.brush_size] * self.ndim
+
+        brush_size = self.brush_size * self.scale_factor
+
+        brush_size_dims = [brush_size] * self.ndim
         if not self.n_dimensional and self.ndim > 2:
             for i in self.dims.not_displayed:
                 brush_size_dims[i] = 1
@@ -724,7 +727,8 @@ class Labels(Image):
             sphere_dims = len(coord)
             # Ensure circle doesn't have spurious point
             # on edge by keeping radius as ##.5
-            radius = np.floor(self.brush_size / 2) + 0.5
+            brush_size = self.brush_size * self.scale_factor
+            radius = np.floor(brush_size / 2) + 0.5
             mask_indices = sphere_indices(radius, sphere_dims)
 
             mask_indices = mask_indices + np.round(np.array(coord)).astype(int)
